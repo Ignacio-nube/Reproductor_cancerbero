@@ -3,32 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cancerbero</title>
+    <title>Cancerbero Music Player</title>
     
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" href="img/music-player.svg" type="image/x-icon">
 </head>
 <body>
-    
-    <section class="reproductor-musica">
-        <h1>titulo</h1>
-        <p>nombre</p>
-        <audio id="cancion">
-            <source src="" type="audio/mpeg"/>
-        </audio>
-        <input type="range" value="0" id="progreso"/>
-        <div class="controles">
-            <button class="atras control">
-                <i class="bi bi-rewind"></i>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Álbumes</h2>
+            <div id="album-list">
+                <!-- Los álbumes se cargarán aquí -->
+            </div>
+            <button id="theme-toggle-button" class="theme-button">
+                <i class="bi bi-sun-fill"></i> <!-- Icono inicial, se cambiará con JS -->
             </button>
-            <button class="iniciar iconoControl">
-                <i class="bi bi-play" id="iconoControl"></i>
-            </button>
-            <button class="siguiente control">
-                <i class="bi bi-fast-forward"></i>
-            </button>
-        </div>
-    </section>
+        </aside>
+        <main class="main-content">
+            <section class="reproductor-musica">
+                <div class="album-info">
+                    <img src="img/default-cover.png" alt="Carátula del Álbum" id="album-cover-art">
+                    <h1 id="album-title">Selecciona un Álbum</h1>
+                    <p id="album-artist">Artista del Álbum</p>
+                    <p id="album-year">Año</p>
+                </div>
+                
+                <audio id="cancion">
+                    <source src="" type="audio/mpeg"/>
+                </audio>
+
+                <div class="song-info">
+                    <h2 id="song-title">Canción</h2>
+                    <p id="song-artist-detail">Artista</p>
+                </div>
+
+                <input type="range" value="0" id="progreso"/>
+                
+                <div class="controles">
+                    <button class="atras control" id="prev-button">
+                        <i class="bi bi-rewind"></i>
+                    </button>
+                    <button class="iniciar iconoControl" id="play-pause-button">
+                        <i class="bi bi-play" id="iconoControl"></i>
+                    </button>
+                    <button class="siguiente control" id="next-button">
+                        <i class="bi bi-fast-forward"></i>
+                    </button>
+                </div>
+
+                <div class="playlist">
+                    <h3>Lista de Canciones</h3>
+                    <ul id="song-list">
+                        <!-- Las canciones del álbum seleccionado se cargarán aquí -->
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>

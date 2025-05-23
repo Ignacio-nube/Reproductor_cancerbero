@@ -1,113 +1,439 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 @import url('https://fonts.googleapis.com/css2?family=Limelight&display=swap');
-:root{
-    --blanco:rgba(228,228,228,1)
+@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap'); /* Fuente temática para "Muerte" */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap'); /* Fuente temática para "Vida" */
+
+:root {
+    --font-vida: 'Cinzel Decorative', cursive;
+    --font-muerte: 'Metal Mania', cursive;
+    --font-base: 'Limelight', sans-serif; /* Fallback o fuente general */
+
+    /* Tema Vida (Claro) */
+    --vida-bg: #f0e6d2; /* Pergamino claro */
+    --vida-text: #3a2c22; /* Marrón oscuro, como tinta antigua */
+    --vida-primary: #5e4a3e;
+    --vida-secondary: #8c786c;
+    --vida-accent: #c0a080; /* Dorado pálido */
+    --vida-shadow: rgba(94, 74, 62, 0.3);
+    --vida-progress-bg: rgba(94, 74, 62, 0.2);
+    --vida-progress-fill: var(--vida-primary);
+    --vida-cover-art-border: var(--vida-primary);
+
+    /* Tema Muerte (Oscuro) */
+    --muerte-bg: #1a1a1a; /* Negro profundo */
+    --muerte-text: #e0e0e0; /* Gris claro, casi blanco */
+    --muerte-primary: #d4af37; /* Dorado oscuro/bronce */
+    --muerte-secondary: #a88a2d;
+    --muerte-accent: #8b0000; /* Rojo sangre oscuro */
+    --muerte-shadow: rgba(200, 200, 200, 0.2);
+    --muerte-progress-bg: rgba(200, 200, 200, 0.1);
+    --muerte-progress-fill: var(--muerte-primary);
+    --muerte-cover-art-border: var(--muerte-primary);
 }
-*{
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Limelight", sans-serif;
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Transición suave para cambio de tema */
 }
+
 body {
     display: flex;
-    justify-content: center;
     min-height: 100vh;
-    align-items: center;
+    font-family: var(--font-base); /* Fuente base por defecto */
+    overflow-x: hidden; /* Evitar scroll horizontal */
+}
+
+body.theme-vida {
+    background-color: var(--vida-bg);
+    color: var(--vida-text);
+    font-family: var(--font-vida);
+}
+
+body.theme-muerte {
+    background-color: var(--muerte-bg);
+    color: var(--muerte-text);
+    font-family: var(--font-muerte);
+}
+
+.container {
+    display: flex;
     width: 100%;
-
-
-
-    background: url(img/Front_Cover.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter:blur(2px);
 }
-body::before{
-    content:'' ;
+
+.sidebar {
+    width: 280px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative; /* Para el botón de tema */
+}
+
+.theme-vida .sidebar {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-right: 1px solid var(--vida-secondary);
+}
+
+.theme-muerte .sidebar {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--muerte-secondary);
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.theme-vida .sidebar h2 { color: var(--vida-primary); }
+.theme-muerte .sidebar h2 { color: var(--muerte-primary); }
+
+#album-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.album-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.theme-vida .album-item:hover { background-color: rgba(0,0,0,0.05); }
+.theme-muerte .album-item:hover { background-color: rgba(255,255,255,0.05); }
+
+.theme-vida .album-item.active { background-color: var(--vida-accent); color: var(--vida-bg); }
+.theme-muerte .album-item.active { background-color: var(--muerte-accent); color: var(--muerte-text); }
+
+
+.album-item-cover {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+.theme-vida .album-item-cover { border: 1px solid var(--vida-secondary); }
+.theme-muerte .album-item-cover { border: 1px solid var(--muerte-secondary); }
+
+
+.album-item p {
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.theme-button {
     position: absolute;
-    background-color: rgba(0,0,0,0.2);
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-body > *{
-    position: relative;
-    z-index: 2;
+.theme-vida .theme-button {
+    background-color: var(--vida-primary);
+    color: var(--vida-bg);
+    box-shadow: 0 2px 5px var(--vida-shadow);
 }
-.reproductor-musica{
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-color: var(--blanco);
-width: 400px;
-padding: 10px 30px;
-border-radius: 30px;
-background-color:rgba(228,228,228,0.1) ;
+.theme-muerte .theme-button {
+    background-color: var(--muerte-primary);
+    color: var(--muerte-bg);
+    box-shadow: 0 2px 5px var(--muerte-shadow);
 }
-.reproductor-musica h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.6;
+.theme-button:hover {
+    transform: scale(1.1);
 }
-.reproductor-musica p{
+
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.reproductor-musica {
+    width: 100%;
+    max-width: 450px; /* Ancho máximo para el reproductor */
+    padding: 30px;
+    border-radius: 20px; /* Bordes más suaves */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.theme-vida .reproductor-musica {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 20px var(--vida-shadow);
+    border: 1px solid var(--vida-secondary);
+}
+.theme-muerte .reproductor-musica {
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px var(--muerte-shadow);
+    border: 1px solid var(--muerte-secondary);
+}
+
+.album-info {
+    margin-bottom: 20px;
+}
+
+#album-cover-art {
+    width: 250px; /* Tamaño de la carátula principal */
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.theme-vida #album-cover-art { border: 3px solid var(--vida-cover-art-border); }
+.theme-muerte #album-cover-art { border: 3px solid var(--muerte-cover-art-border); }
+
+
+#album-title {
+    font-size: 2rem; /* Más grande */
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.theme-vida #album-title { color: var(--vida-primary); }
+.theme-muerte #album-title { color: var(--muerte-primary); }
+
+
+#album-artist, #album-year {
     font-size: 1rem;
-    font-weight: 400;
-    opacity: 0.6;
+    opacity: 0.8;
 }
+.theme-vida #album-artist, .theme-vida #album-year { color: var(--vida-text); }
+.theme-muerte #album-artist, .theme-muerte #album-year { color: var(--muerte-text); }
+
+
+.song-info {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#song-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+#song-artist-detail {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
 #progreso {
     appearance: none;
     -webkit-appearance: none;
     width: 100%;
-    height: 7px;
-    background: rgba(165,165,165,0.4);
-    border-radius: 4px;
-    margin: 32px 0 24px;
+    height: 10px; /* Un poco más gruesa */
+    border-radius: 5px;
+    margin: 25px 0;
     cursor: pointer;
+    outline: none;
 }
 
+.theme-vida #progreso { background-color: var(--vida-progress-bg); }
+.theme-muerte #progreso { background-color: var(--muerte-progress-bg); }
+
+/* Estilo del thumb (bolita) */
 #progreso::-webkit-slider-thumb {
     appearance: none;
     -webkit-appearance: none;
-    background: rgba(165,165,165,0.4);
-    width: 16px;
-    aspect-ratio: 1/1;
+    width: 20px; /* Más grande */
+    height: 20px;
     border-radius: 50%;
-    outline: 4px solid var(--blanco);
-    box-shadow: 0 6px 10px rgba(165,165,165,0.4);
+    border: none; /* Quitar borde por defecto */
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease; /* Animación sutil en hover/active */
 }
+.theme-vida #progreso::-webkit-slider-thumb { background-color: var(--vida-primary); }
+.theme-muerte #progreso::-webkit-slider-thumb { background-color: var(--muerte-primary); }
+
+#progreso::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+.theme-vida #progreso::-moz-range-thumb { background-color: var(--vida-primary); }
+.theme-muerte #progreso::-moz-range-thumb { background-color: var(--muerte-primary); }
+
+
+/* Efecto de llenado */
+/* Este es un truco usando el fondo del input y el thumb */
+/* Para un efecto de llenado más preciso se necesitaría JS o un div superpuesto */
+/* Este es un enfoque simple con gradiente, puede no ser perfecto en todos los navegadores */
+
+.theme-vida #progreso {
+    background: linear-gradient(to right, var(--vida-progress-fill) 0%, var(--vida-progress-fill) var(--progress-percent, 0%), var(--vida-progress-bg) var(--progress-percent, 0%), var(--vida-progress-bg) 100%);
+}
+.theme-muerte #progreso {
+     background: linear-gradient(to right, var(--muerte-progress-fill) 0%, var(--muerte-progress-fill) var(--progress-percent, 0%), var(--muerte-progress-bg) var(--progress-percent, 0%), var(--muerte-progress-bg) 100%);
+}
+
+
 .controles {
     display: flex;
     justify-content: center;
+    align-items: center; /* Alinea verticalmente */
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .controles button {
-    width: 50px;
-    aspect-ratio: 1/1;
-    margin: 20px;
-    background: rgba(165,165,165,0.2);
+    width: 60px; /* Botones más grandes */
+    height: 60px;
+    margin: 0 15px; /* Espacio entre botones */
     border-radius: 50%;
-    border:  1px solid var(--blanco);
-    outline: 0;
-    font-size: 1.5rem;
-    box-shadow: 0 6px 10px rgba(165,165,165,0.4);
+    border: none;
+    font-size: 1.8rem; /* Iconos más grandes */
     cursor: pointer;
-    transition:  all 0.1s linear;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                background-color 0.2s ease, 
+                box-shadow 0.2s ease; /* Animación mejorada */
 }
-.controles .control{
-    transform: scale(1.2);
+
+.theme-vida .controles button {
+    background-color: var(--vida-secondary);
+    color: var(--vida-bg);
+    box-shadow: 0 4px 8px var(--vida-shadow);
 }
-.controles .control:hover {
-    transform: scale(1.1);
+.theme-muerte .controles button {
+    background-color: var(--muerte-secondary);
+    color: var(--muerte-bg);
+    box-shadow: 0 4px 8px var(--muerte-shadow);
 }
-.controles .iconoControl{
-    transform: scale(1.3);
+
+.controles button:hover {
+    transform: scale(1.1); /* Animación al pasar el mouse */
 }
-.controles .iconoControl:hover {
-    transform: scale(1.1);
+.theme-vida .controles button:hover { background-color: var(--vida-primary); }
+.theme-muerte .controles button:hover { background-color: var(--muerte-primary); }
+
+
+.controles button:active {
+    transform: scale(0.95); /* Animación al hacer clic */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.controles .iconoControl { /* Botón de Play/Pause más grande */
+    width: 70px;
+    height: 70px;
+    font-size: 2.2rem;
+}
+.theme-vida .controles .iconoControl { background-color: var(--vida-primary); }
+.theme-muerte .controles .iconoControl { background-color: var(--muerte-primary); }
+
+.theme-vida .controles .iconoControl:hover { background-color: var(--vida-accent); }
+.theme-muerte .controles .iconoControl:hover { background-color: var(--muerte-accent); }
+
+
+.playlist {
+    width: 100%;
+    margin-top: 20px;
+    max-height: 150px; /* Altura máxima para la lista, con scroll si es necesario */
+    overflow-y: auto;
+    padding-right: 10px; /* Espacio para la barra de scroll */
+}
+
+.playlist h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+.theme-vida .playlist h3 { color: var(--vida-primary); }
+.theme-muerte .playlist h3 { color: var(--muerte-primary); }
+
+
+#song-list {
+    list-style: none;
+}
+
+.song-playlist-item {
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left; /* Alinear texto a la izquierda */
+    font-size: 0.95rem;
+}
+
+.theme-vida .song-playlist-item:hover { background-color: rgba(0,0,0,0.05); }
+.theme-muerte .song-playlist-item:hover { background-color: rgba(255,255,255,0.05); }
+
+.theme-vida .song-playlist-item.active { background-color: var(--vida-accent); color: var(--vida-bg); }
+.theme-muerte .song-playlist-item.active { background-color: var(--muerte-accent); color: var(--muerte-text); }
+
+/* Estilos para la barra de scroll en la playlist */
+.playlist::-webkit-scrollbar {
+    width: 8px;
+}
+.theme-vida .playlist::-webkit-scrollbar-track { background: var(--vida-progress-bg); border-radius: 4px;}
+.theme-muerte .playlist::-webkit-scrollbar-track { background: var(--muerte-progress-bg); border-radius: 4px;}
+
+.theme-vida .playlist::-webkit-scrollbar-thumb { background: var(--vida-secondary); border-radius: 4px;}
+.theme-muerte .playlist::-webkit-scrollbar-thumb { background: var(--muerte-secondary); border-radius: 4px;}
+
+.theme-vida .playlist::-webkit-scrollbar-thumb:hover { background: var(--vida-primary); }
+.theme-muerte .playlist::-webkit-scrollbar-thumb:hover { background: var(--muerte-primary); }
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        max-height: 250px; /* Altura máxima para la barra lateral en móviles */
+        border-right: none;
+        border-bottom: 1px solid var(--vida-secondary); /* Separador */
+    }
+    .theme-muerte .sidebar {
+        border-bottom: 1px solid var(--muerte-secondary);
+    }
+    .main-content {
+        padding: 15px;
+    }
+    .reproductor-musica {
+        padding: 20px;
+    }
+    #album-cover-art {
+        width: 200px;
+        height: 200px;
+    }
+    #album-title { font-size: 1.6rem; }
+    .controles button { width: 50px; height: 50px; font-size: 1.5rem; margin: 0 10px;}
+    .controles .iconoControl { width: 60px; height: 60px; font-size: 1.8rem;}
+
+    .theme-button { /* Mover el botón de tema a la esquina superior derecha en móviles */
+        top: 10px;
+        right: 10px;
+        left: auto;
+        bottom: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar { max-height: 200px; }
+    #album-cover-art { width: 150px; height: 150px; }
+    #album-title { font-size: 1.4rem; }
+    .playlist { max-height: 100px; }
+    .song-info { margin-top: 10px; margin-bottom: 10px; }
+    #progreso { margin: 15px 0; }
 }
